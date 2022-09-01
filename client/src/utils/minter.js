@@ -1,10 +1,7 @@
+import { create } from "ipfs-http-client"
 import { Web3Storage } from "web3.storage/dist/bundle.esm.min.js"
 import axios from "axios"
-
-const client = new Web3Storage({
-  token:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEE0MDk2MjJERmU3MDZjNzY3OUExOUM5NzU4Qjc3QzJmN2E4MjlkOTUiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjIwMjg2MjQwNzYsIm5hbWUiOiJjZWxvTmZ0RGVtbyJ9.VbInbK1Ud2MHgzuOEmgHH-VWQq7XJv9Q0-gdvC-wOOA",
-})
+const client = create({ url: "https://ipfs.infura.io:5001/api/v0" })
 // ...
 export const createNft = async (
   minterContract,
@@ -45,6 +42,10 @@ export const createNft = async (
 // ...
 export const uploadFileToWebStorage = async (e) => {
   // Construct with token and endpoint
+  const client = new Web3Storage({
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEE0MDk2MjJERmU3MDZjNzY3OUExOUM5NzU4Qjc3QzJmN2E4MjlkOTUiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjIwMjg2MjQwNzYsIm5hbWUiOiJjZWxvTmZ0RGVtbyJ9.VbInbK1Ud2MHgzuOEmgHH-VWQq7XJv9Q0-gdvC-wOOA",
+  })
 
   const file = e.target.files
   if (!file) return
