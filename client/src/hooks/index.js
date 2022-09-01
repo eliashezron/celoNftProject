@@ -1,3 +1,3 @@
-export * from "./useCounterContract";
-export * from "./useBalance";
-export * from "./useContract";
+export * from "./useMinterContract"
+export * from "./useBalance"
+export * from "./useContract"
