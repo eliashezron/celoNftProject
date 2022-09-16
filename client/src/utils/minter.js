@@ -75,7 +75,7 @@ export const uploadFileToWebStorage = async (e) => {
   const res = await client.get(rootCid) // Promise<Web3Response | null>
   const files = await res.files() // Promise<Web3File[]>
 
-  return `https://ipfs.infura.io/ipfs/${files[0].cid}`
+  return `https://ipfs.io/ipfs/${files[0].cid}`
 }
 export const getNfts = async (minterContract) => {
   try {
@@ -84,15 +84,18 @@ export const getNfts = async (minterContract) => {
     for (let i = 0; i < Number(nftsLength); i++) {
       const nft = new Promise(async (resolve) => {
         const res = await minterContract.methods.tokenURI(i).call()
+        console.log(res)
         const meta = await fetchNftMeta(res)
+        const data = await JSON.parse(meta.data)
+        console.log(data)
         const owner = await fetchNftOwner(minterContract, i)
         resolve({
           index: i,
           owner,
-          name: meta.data.name,
-          image: meta.data.image,
-          description: meta.data.description,
-          attributes: meta.data.attributes,
+          name: data.name,
+          image: data.image,
+          description: data.description,
+          attributes: data.attributes,
         })
       })
       nfts.push(nft)
