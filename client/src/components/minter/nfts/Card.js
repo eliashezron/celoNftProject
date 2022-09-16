@@ -30,20 +30,22 @@ const NftCard = ({ nft }) => {
           <Card.Title>{name}</Card.Title>
           <Card.Text className='flex-grow-1'>{description}</Card.Text>
           <div>
-            <Row className='mt-2'>
-              {attributes.map((attribute, key) => (
-                <Col key={key}>
-                  <div className='border rounded bg-light'>
-                    <div className='text-secondary fw-lighter small text-capitalize'>
-                      {attribute.trait_type}
+            {attributes && (
+              <Row className='mt-2'>
+                {attributes.map((attribute, key) => (
+                  <Col key={key}>
+                    <div className='border rounded bg-light'>
+                      <div className='text-secondary fw-lighter small text-capitalize'>
+                        {attribute.trait_type}
+                      </div>
+                      <div className='text-secondary text-capitalize font-monospace'>
+                        {attribute.value}
+                      </div>
                     </div>
-                    <div className='text-secondary text-capitalize font-monospace'>
-                      {attribute.value}
-                    </div>
-                  </div>
-                </Col>
-              ))}
-            </Row>
+                  </Col>
+                ))}
+              </Row>
+            )}
           </div>
         </Card.Body>
       </Card>

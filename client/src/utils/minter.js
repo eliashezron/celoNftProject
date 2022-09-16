@@ -1,8 +1,30 @@
-import { create } from "ipfs-http-client"
+// import { create } from "ipfs-http-client"
+// import process from 'process'
+// import minimist from 'minimist'
 import { Web3Storage } from "web3.storage/dist/bundle.esm.min.js"
+// import { NFTStorage } from "nft.storage"
+// import mime from "mime"
 import axios from "axios"
-const client = create({ url: "https://ipfs.infura.io:5001/api/v0" })
+// const client = create({ url: "https://ipfs.infura.io:5001/api/v0" })
 // ...
+
+// const NFT_STORAGE_TOKEN =
+//   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGE0MmNiMUVkNUE1M0Q5NTZDODIyQWRmYTREQWQ0ZGM4RkUzQTVERkMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2MTAwMTUwNzU3MywibmFtZSI6InRyaWFsMSJ9.zcCKSYdMC3PwwXVYwFsHWCSmvOEP4k9QhtIW8Cf74y8"
+// const client = new NFTStorage({ token: NFT_STORAGE_TOKEN })
+const makeFileObjects = (file) => {
+  const blob = new Blob([JSON.stringify(file)], { type: "application/json" })
+  const files = [new File([blob], `${file.name}.json`)]
+  return files
+}
+const client = new Web3Storage({
+  token:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEE0MDk2MjJERmU3MDZjNzY3OUExOUM5NzU4Qjc3QzJmN2E4MjlkOTUiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjIwMjg2MjQwNzYsIm5hbWUiOiJjZWxvTmZ0RGVtbyJ9.VbInbK1Ud2MHgzuOEmgHH-VWQq7XJv9Q0-gdvC-wOOA",
+})
+
+const storeFiles = async (files) => {
+  const cid = await client.put(files)
+  return cid
+}
 export const createNft = async (
   minterContract,
   performActions,
@@ -23,10 +45,11 @@ export const createNft = async (
 
     try {
       // save NFT metadata to IPFS
-      const added = await client.add(data)
+      const files = makeFileObjects(data)
+      const cid = await storeFiles(files)
 
       // IPFS url for uploaded metadata
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`
+      const url = `https://ipfs.io/ipfs/${cid}/undefined.json`
 
       // mint the NFT and save the IPFS url to the blockchain
       let transaction = await minterContract.methods
@@ -42,10 +65,6 @@ export const createNft = async (
 // ...
 export const uploadFileToWebStorage = async (e) => {
   // Construct with token and endpoint
-  const client = new Web3Storage({
-    token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEE0MDk2MjJERmU3MDZjNzY3OUExOUM5NzU4Qjc3QzJmN2E4MjlkOTUiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NjIwMjg2MjQwNzYsIm5hbWUiOiJjZWxvTmZ0RGVtbyJ9.VbInbK1Ud2MHgzuOEmgHH-VWQq7XJv9Q0-gdvC-wOOA",
-  })
 
   const file = e.target.files
   if (!file) return
