@@ -1,6 +1,5 @@
 {
-  "homepage": "https://eliashezron.github.io/celoNftProject/",
-  "name": "celo-react-boilerplate",
+   "name": "celo-react-boilerplate",
   "version": "0.2.0",
   "private": true,
   "dependencies": {
